@@ -1,0 +1,19 @@
+{
+    "name": "AOD.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f0dc169de80dc4a188c76e581af7ca5d",
+        "GUID:9b538c4d2434c4d448780976422294ff"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

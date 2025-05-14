@@ -1,0 +1,16 @@
+{
+    "name": "AOD.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9b538c4d2434c4d448780976422294ff"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
