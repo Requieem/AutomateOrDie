@@ -1,0 +1,655 @@
+fileFormatVersion: 2
+guid: d414a6ba16fea4414a651f4841d1f5d8
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3787534038189514746
+    second: AutobruhWalk_0
+  - first:
+      213: -7501884497297454927
+    second: AutobruhWalk_1
+  - first:
+      213: -1542380818817249018
+    second: AutobruhWalk_2
+  - first:
+      213: -4514286874907854103
+    second: AutobruhWalk_3
+  - first:
+      213: 6765139778441036579
+    second: AutobruhWalk_4
+  - first:
+      213: 8308722595277140526
+    second: AutobruhWalk_5
+  - first:
+      213: 6861708983726275463
+    second: AutobruhWalk_6
+  - first:
+      213: -2939055702257294708
+    second: AutobruhWalk_7
+  - first:
+      213: 3313663992577079003
+    second: AutobruhWalk_8
+  - first:
+      213: 6159181346820300658
+    second: AutobruhWalk_9
+  - first:
+      213: -2607176993542227841
+    second: AutobruhWalk_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 96
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: AutobruhWalk_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -14}
+        - {x: 1, y: -15}
+        - {x: 1, y: -16}
+        - {x: 9, y: -16}
+        - {x: 11, y: -14}
+        - {x: 10, y: -12}
+        - {x: 10, y: -9}
+        - {x: 11, y: -8}
+        - {x: 11, y: 0}
+        - {x: 10, y: 3}
+        - {x: 4, y: 8}
+        - {x: -4, y: 8}
+        - {x: -9, y: 4}
+        - {x: -10, y: 1}
+        - {x: -10, y: -9}
+        - {x: -12, y: -9}
+        - {x: -13, y: -12}
+        - {x: -9, y: -15}
+        - {x: -9, y: -16}
+        - {x: 1, y: -16}
+      tessellationDetail: 1
+      bones: []
+      spriteID: aff9cf8f326009430800000000000000
+      internalID: 3787534038189514746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -14}
+        - {x: 1, y: -14}
+        - {x: 2, y: -15}
+        - {x: 2, y: -16}
+        - {x: 10, y: -16}
+        - {x: 11, y: -15}
+        - {x: 10, y: -9}
+        - {x: 11, y: -8}
+        - {x: 11, y: 0}
+        - {x: 10, y: 3}
+        - {x: 4, y: 8}
+        - {x: -4, y: 8}
+        - {x: -9, y: 4}
+        - {x: -10, y: 1}
+        - {x: -10, y: -9}
+        - {x: -12, y: -7}
+        - {x: -13, y: -7}
+        - {x: -16, y: -10}
+        - {x: -16, y: -11}
+        - {x: -13, y: -14}
+        - {x: -12, y: -14}
+        - {x: -10, y: -12}
+        - {x: -9, y: -12}
+        - {x: -9, y: -16}
+        - {x: 1, y: -16}
+      tessellationDetail: 1
+      bones: []
+      spriteID: 1b84390ebc3f3e790800000000000000
+      internalID: -7501884497297454927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 3, y: -15}
+        - {x: 8, y: -15}
+        - {x: 10, y: -13}
+        - {x: 10, y: -1}
+        - {x: 9, y: 2}
+        - {x: 3, y: 7}
+        - {x: -5, y: 7}
+        - {x: -10, y: 3}
+        - {x: -11, y: 0}
+        - {x: -11, y: -7}
+        - {x: -9, y: -9}
+        - {x: -9, y: -11}
+        - {x: -8, y: -12}
+        - {x: -8, y: -16}
+        - {x: 2, y: -16}
+      - - {x: -11, y: -11}
+        - {x: -11, y: -8}
+        - {x: -13, y: -6}
+        - {x: -16, y: -7}
+        - {x: -16, y: -10}
+        - {x: -14, y: -12}
+      tessellationDetail: 1
+      bones: []
+      spriteID: 601950231dc589ae0800000000000000
+      internalID: -1542380818817249018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: -9, y: -9}
+        - {x: -9, y: -11}
+        - {x: -8, y: -12}
+        - {x: -8, y: -16}
+        - {x: 2, y: -16}
+        - {x: 3, y: -15}
+        - {x: 8, y: -15}
+        - {x: 10, y: -13}
+        - {x: 10, y: -1}
+        - {x: 9, y: 2}
+        - {x: 3, y: 7}
+        - {x: -5, y: 7}
+        - {x: -10, y: 3}
+        - {x: -11, y: 0}
+        - {x: -11, y: -6}
+        - {x: -14, y: -5}
+        - {x: -16, y: -7}
+        - {x: -14, y: -10}
+        - {x: -11, y: -9}
+        - {x: -11, y: -7}
+      tessellationDetail: 1
+      bones: []
+      spriteID: 9eab8e641080a51c0800000000000000
+      internalID: -4514286874907854103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -15}
+        - {x: -2, y: -13}
+        - {x: -1, y: -12}
+        - {x: 1, y: -12}
+        - {x: 0, y: -16}
+        - {x: 10, y: -16}
+        - {x: 10, y: -14}
+        - {x: 12, y: -12}
+        - {x: 12, y: -10}
+        - {x: 10, y: -8}
+        - {x: 10, y: 2}
+        - {x: 9, y: 5}
+        - {x: 3, y: 10}
+        - {x: -5, y: 10}
+        - {x: -10, y: 6}
+        - {x: -11, y: 3}
+        - {x: -11, y: -9}
+        - {x: -9, y: -11}
+        - {x: -9, y: -13}
+        - {x: -10, y: -14}
+        - {x: -10, y: -16}
+        - {x: 0, y: -16}
+      tessellationDetail: 1
+      bones: []
+      spriteID: 323c7d509ca92ed50800000000000000
+      internalID: 6765139778441036579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -15}
+        - {x: -2, y: -13}
+        - {x: -1, y: -12}
+        - {x: 1, y: -12}
+        - {x: 0, y: -16}
+        - {x: 10, y: -16}
+        - {x: 10, y: -15}
+        - {x: 14, y: -12}
+        - {x: 14, y: -11}
+        - {x: 10, y: -8}
+        - {x: 10, y: 2}
+        - {x: 9, y: 5}
+        - {x: 3, y: 10}
+        - {x: -5, y: 10}
+        - {x: -10, y: 6}
+        - {x: -11, y: 3}
+        - {x: -11, y: -9}
+        - {x: -9, y: -11}
+        - {x: -9, y: -13}
+        - {x: -10, y: -14}
+        - {x: -10, y: -16}
+        - {x: 0, y: -16}
+      tessellationDetail: 1
+      bones: []
+      spriteID: e2271cccd238e4370800000000000000
+      internalID: 8308722595277140526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -14}
+        - {x: 1, y: -14}
+        - {x: 1, y: -16}
+        - {x: 11, y: -16}
+        - {x: 10, y: -14}
+        - {x: 11, y: -12}
+        - {x: 10, y: -10}
+        - {x: 10, y: -10}
+        - {x: 10, y: -10}
+        - {x: 10, y: -10}
+        - {x: 10, y: -10}
+        - {x: 11, y: -8}
+        - {x: 11, y: 0}
+        - {x: 10, y: 3}
+        - {x: 4, y: 8}
+        - {x: -4, y: 8}
+        - {x: -9, y: 4}
+        - {x: -10, y: 1}
+        - {x: -10, y: -8}
+        - {x: -8, y: -10}
+        - {x: -10, y: -12}
+        - {x: -10, y: -16}
+        - {x: -2, y: -16}
+      tessellationDetail: 1
+      bones: []
+      spriteID: 78b7c1f37ffa93f50800000000000000
+      internalID: 6861708983726275463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 1, y: -14}
+        - {x: 1, y: -16}
+        - {x: 11, y: -16}
+        - {x: 10, y: -14}
+        - {x: 11, y: -13}
+        - {x: 10, y: -9}
+        - {x: 11, y: -8}
+        - {x: 11, y: 0}
+        - {x: 10, y: 3}
+        - {x: 4, y: 8}
+        - {x: -4, y: 8}
+        - {x: -9, y: 4}
+        - {x: -10, y: 1}
+        - {x: -10, y: -8}
+        - {x: -8, y: -10}
+        - {x: -10, y: -12}
+        - {x: -10, y: -14}
+        - {x: -9, y: -16}
+        - {x: -1, y: -16}
+      - - {x: 11, y: -8}
+        - {x: 11, y: -8}
+        - {x: 11, y: -8}
+        - {x: 11, y: -8}
+        - {x: 11, y: -8}
+      - - {x: 11, y: -8}
+        - {x: 11, y: -8}
+        - {x: 11, y: -8}
+        - {x: 11, y: -8}
+      tessellationDetail: 1
+      bones: []
+      spriteID: c822edb19606637d0800000000000000
+      internalID: -2939055702257294708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 10, y: -14}
+        - {x: 11, y: -13}
+        - {x: 11, y: -11}
+        - {x: 10, y: -10}
+        - {x: 10, y: -1}
+        - {x: 9, y: 2}
+        - {x: 3, y: 7}
+        - {x: -5, y: 7}
+        - {x: -10, y: 3}
+        - {x: -11, y: 0}
+        - {x: -11, y: -7}
+        - {x: -9, y: -9}
+        - {x: -9, y: -13}
+        - {x: -7, y: -15}
+        - {x: 1, y: -15}
+        - {x: 1, y: -16}
+        - {x: 11, y: -16}
+      tessellationDetail: 1
+      bones: []
+      spriteID: bd63f8e38df7cfd20800000000000000
+      internalID: 3313663992577079003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_9
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -15}
+        - {x: 1, y: -16}
+        - {x: 11, y: -16}
+        - {x: 10, y: -14}
+        - {x: 12, y: -12}
+        - {x: 12, y: -11}
+        - {x: 10, y: -9}
+        - {x: 10, y: -1}
+        - {x: 9, y: 2}
+        - {x: 3, y: 7}
+        - {x: -5, y: 7}
+        - {x: -10, y: 3}
+        - {x: -11, y: 0}
+        - {x: -11, y: -7}
+        - {x: -9, y: -9}
+        - {x: -9, y: -11}
+        - {x: -10, y: -12}
+        - {x: -10, y: -14}
+        - {x: -8, y: -16}
+        - {x: -2, y: -16}
+      tessellationDetail: 1
+      bones: []
+      spriteID: 27f9f6c5dcec97550800000000000000
+      internalID: 6159181346820300658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutobruhWalk_10
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -15}
+        - {x: -2, y: -13}
+        - {x: -1, y: -12}
+        - {x: 1, y: -12}
+        - {x: 0, y: -16}
+        - {x: 10, y: -16}
+        - {x: 10, y: -15}
+        - {x: 8, y: -13}
+        - {x: 8, y: -11}
+        - {x: 10, y: -9}
+        - {x: 10, y: 2}
+        - {x: 9, y: 5}
+        - {x: 3, y: 10}
+        - {x: -5, y: 10}
+        - {x: -10, y: 6}
+        - {x: -11, y: 3}
+        - {x: -11, y: -9}
+        - {x: -10, y: -10}
+        - {x: -11, y: -14}
+        - {x: -10, y: -16}
+        - {x: 0, y: -16}
+      tessellationDetail: 1
+      bones: []
+      spriteID: f783859765271dbd0800000000000000
+      internalID: -2607176993542227841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 016ac340c85f84c2fb21d03a45db8c67
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      AutobruhWalk_0: 3787534038189514746
+      AutobruhWalk_1: -7501884497297454927
+      AutobruhWalk_10: -2607176993542227841
+      AutobruhWalk_2: -1542380818817249018
+      AutobruhWalk_3: -4514286874907854103
+      AutobruhWalk_4: 6765139778441036579
+      AutobruhWalk_5: 8308722595277140526
+      AutobruhWalk_6: 6861708983726275463
+      AutobruhWalk_7: -2939055702257294708
+      AutobruhWalk_8: 3313663992577079003
+      AutobruhWalk_9: 6159181346820300658
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

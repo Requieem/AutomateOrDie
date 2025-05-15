@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68b6dad1788940ffb9bea2823b7cf624, type: 3}
+  m_Name: FactoryPack
+  m_EditorClassIdentifier: 
+  m_primaryFloor: {fileID: 11400000, guid: 77db243f0c572420584381879732999f, type: 2}
+  m_secondaryFloors:
+  - {fileID: 11400000, guid: e63d729f475a24950b5610b782796b4d, type: 2}
+  - {fileID: 11400000, guid: 97032b41e11b1459b933209168650e8e, type: 2}
+  - {fileID: 11400000, guid: 2ded06cfb8825403d9d166050b125af0, type: 2}
+  - {fileID: 11400000, guid: 029d2c4473b9048549af7603cc1edab5, type: 2}
+  - {fileID: 11400000, guid: 7f7a06a81a86547e6906531c3166399a, type: 2}
+  - {fileID: 11400000, guid: 2da0cd644cea7469e9048adde3dab8ae, type: 2}
+  - {fileID: 11400000, guid: 4e9ac6fdb4ae446ffbc658127d5ceb4e, type: 2}
+  - {fileID: 11400000, guid: 0ca4abc0fba4a4331bdc0e0f61df9ae4, type: 2}
+  m_primaryWall: {fileID: 11400000, guid: 24688416f3973479c9f1afad8647c598, type: 2}
+  m_secondaryWalls:
+  - {fileID: 11400000, guid: e29c8b4a279724673a137a2ba0966ad6, type: 2}
+  - {fileID: 11400000, guid: 0037cf3b178ae49e1a398459e36151ad, type: 2}
+  - {fileID: 11400000, guid: ecf3deef8bd8c4a84a5ec224dbef65ed, type: 2}
+  m_secondaryFloorDensity: 0.1
+  m_secondaryWallDensity: 0.15
