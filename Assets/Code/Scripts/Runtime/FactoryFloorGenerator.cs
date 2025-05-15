@@ -1,4 +1,5 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Code.Scripts.Common;
 
 namespace Code.Scripts.Runtime
@@ -17,11 +18,13 @@ public class FactoryFloorGenerator : MonoBehaviour
     [SerializeField] private int m_seed = 12345;
     [SerializeField] [Range(0f, 1f)] private float m_initialFillPercent = 0.45f;
     [SerializeField] private int m_smoothIterations = 5;
+    [SerializeField] private float m_resourceDensity = 0.25f;
     [SerializeField] private LevelPack m_levelPack;
 
     [Header("Tilemap")]
     [SerializeField] private Tilemap m_environmentTilemap;
     [SerializeField] private Tilemap m_wallTilemap;
+    [SerializeField] private Tilemap m_resourcesTilemap;
 
     private GridManager m_gridManager;
     private int[,] m_map;
@@ -36,6 +39,9 @@ public class FactoryFloorGenerator : MonoBehaviour
         m_wallTilemap.size = new Vector3Int(m_width, m_height, 1);
         m_wallTilemap.origin = new Vector3Int(0, -m_height, 0);
         m_wallTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin
+        m_resourcesTilemap.size = new Vector3Int(m_width, m_height, 1);
+        m_resourcesTilemap.origin = new Vector3Int(0, -m_height, 0);
+        m_resourcesTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin
         Generate();
     }
 
@@ -99,6 +105,8 @@ public class FactoryFloorGenerator : MonoBehaviour
         if (m_environmentTilemap == null) return;
 
         m_environmentTilemap.ClearAllTiles();
+        m_wallTilemap.ClearAllTiles();
+        m_resourcesTilemap.ClearAllTiles();
 
         for (var x = 0; x < m_width; x++)
         for (var y = 0; y < m_height; y++)
@@ -115,6 +123,22 @@ public class FactoryFloorGenerator : MonoBehaviour
             else
                 m_wallTilemap.SetTile(cellPos, randomTile);
         }
+
+        var resourcePositions = GetResourcePositions(m_resourceDensity);
+        foreach (var pos in resourcePositions)
+        {
+            var cellPos = new Vector3Int(pos.x, -pos.y, 0); // Match grid top-left origin
+            var randomTile = m_levelPack.RandomResourceAt(pos);
+            if (randomTile == null) continue;
+            if (!m_gridManager.TryAddResource(cellPos.ToVector2Int(), randomTile))
+                continue;
+            m_gridManager.TryRemoveEnvironment(cellPos.ToVector2Int());
+            m_gridManager.TryRemoveStructure(cellPos.ToVector2Int());
+            m_gridManager.TryRemoveCharacter(cellPos.ToVector2Int());
+            m_environmentTilemap.SetTile(cellPos, null);
+            m_wallTilemap.SetTile(cellPos, null);
+            m_resourcesTilemap.SetTile(cellPos, randomTile);
+        }
     }
 
     private bool IsWall(int x, int y)
@@ -125,6 +149,94 @@ public class FactoryFloorGenerator : MonoBehaviour
         var hasBottomWall = y > 0 && m_map[x, y - 1] == 1;
         return !(hasLeftWall && hasRightWall && hasTopWall && hasBottomWall);
     }
+
+    private List<Vector2Int> GetResourcePositions(float maxDensity)
+    {
+        var allFloorPositions = new List<Vector2Int>();
+
+        for (var x = 0; x < m_width; x++)
+        {
+            for (var y = 0; y < m_height; y++)
+            {
+                var pos = new Vector3Int(x, -y, 0); // grid convention
+                if (m_environmentTilemap.HasTile(pos) &&
+                    !m_wallTilemap.HasTile(pos) &&
+                    (m_resourcesTilemap == null || !m_resourcesTilemap.HasTile(pos)))
+                {
+                    allFloorPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        Shuffle(allFloorPositions);
+
+        var chosen = new List<Vector2Int>();
+        var taken = new HashSet<Vector2Int>();
+        var maxCount = Mathf.FloorToInt(allFloorPositions.Count * maxDensity);
+
+        foreach (var pos in allFloorPositions)
+        {
+            if (IsClearAround(pos, taken))
+            {
+                chosen.Add(pos);
+                MarkTaken(pos, taken);
+                if (chosen.Count >= maxCount)
+                    break;
+            }
+        }
+
+        return chosen;
+    }
+
+    private bool IsClearAround(Vector2Int center, HashSet<Vector2Int> taken)
+    {
+        const float radius = 2.5f;
+        float radiusSqr = radius * radius;
+
+        for (int dx = -3; dx <= 3; dx++) // radius 2.5 fits within 3 tiles
+        {
+            for (int dy = -3; dy <= 3; dy++)
+            {
+                if (dx * dx + dy * dy > radiusSqr)
+                    continue;
+
+                var check = new Vector2Int(center.x + dx, center.y + dy);
+                if (taken.Contains(check) || IsWall(check.x, check.y))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void MarkTaken(Vector2Int center, HashSet<Vector2Int> taken)
+    {
+        const float radius = 2.5f;
+        float radiusSqr = radius * radius;
+
+        for (int dx = -3; dx <= 3; dx++)
+        {
+            for (int dy = -3; dy <= 3; dy++)
+            {
+                if (dx * dx + dy * dy > radiusSqr)
+                    continue;
+
+                taken.Add(new Vector2Int(center.x + dx, center.y + dy));
+            }
+        }
+    }
+
+    private void Shuffle<T>(IList<T> list)
+    {
+        var n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            var k = Random.Range(0, n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+    }
+
 }
 
 }

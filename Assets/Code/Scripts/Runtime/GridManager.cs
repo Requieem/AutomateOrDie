@@ -13,6 +13,7 @@ namespace Code.Scripts.Runtime
         [SerializeField] private Vector2 m_cellSize;
         [SerializeField] private Vector2 m_bounds;
         [SerializeField] private SerializedDictionary<Vector2Int, Structure> m_structures;
+        [SerializeField] private SerializedDictionary<Vector2Int, Tile> m_resources;
         [SerializeField] private SerializedDictionary<Vector2Int, Tile> m_environment;
         [SerializeField] private SerializedDictionary<Vector2Int, Character> m_characters;
 
@@ -103,6 +104,11 @@ namespace Code.Scripts.Runtime
             return !TryGetCell(position, out _) && m_environment.TryAdd(position, tile);
         }
 
+        public bool TryAddResource(Vector2Int position, Tile tile)
+        {
+            return !TryGetCell(position, out _) && m_resources.TryAdd(position, tile);
+        }
+
         public bool TryRemoveStructure(Vector2Int position)
         {
             return m_structures.Remove(position);
@@ -116,6 +122,11 @@ namespace Code.Scripts.Runtime
         public bool TryRemoveEnvironment(Vector2Int position)
         {
             return m_environment.Remove(position);
+        }
+
+        public bool TryRemoveResource(Vector2Int position)
+        {
+            return m_resources.Remove(position);
         }
 
         public bool TryGetStructure(Vector2Int position, out Structure structure)
@@ -133,11 +144,16 @@ namespace Code.Scripts.Runtime
             return m_environment.TryGetValue(position, out tile);
         }
 
+        public bool TryGetResource(Vector2Int position, out Tile tile)
+        {
+            return m_resources.TryGetValue(position, out tile);
+        }
+
         public Vector2Int? SelectedCell { get; set; }
 
         #region Visual Debugging
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
             for (var x = 0; x < m_bounds.x; x++)
@@ -152,10 +168,8 @@ namespace Code.Scripts.Runtime
             }
 
             Gizmos.color = Color.magenta;
-            foreach (var cell in m_structures)
+            foreach (var (pos, obj) in m_structures)
             {
-                var pos = cell.Key;
-                var obj = cell.Value;
                 var cellPosition = pos * m_cellSize + m_center;
                 Gizmos.DrawWireCube(cellPosition + transform.position.ToVector2(), m_cellSize);
 
@@ -164,10 +178,18 @@ namespace Code.Scripts.Runtime
             }
 
             Gizmos.color = Color.red;
-            foreach (var cell in m_environment)
+            foreach (var (pos, obj) in m_environment)
             {
-                var pos = cell.Key;
-                var obj = cell.Value;
+                var cellPosition = pos * m_cellSize + m_center;
+                Gizmos.DrawWireCube(cellPosition + transform.position.ToVector2(), m_cellSize);
+
+                // if (obj != null)
+                //     DrawString(obj.name, cellPosition + transform.position.ToVector2(), Color.yellow, Vector2.zero);
+            }
+
+            Gizmos.color = Color.yellow;
+            foreach (var (pos, obj) in m_resources)
+            {
                 var cellPosition = pos * m_cellSize + m_center;
                 Gizmos.DrawWireCube(cellPosition + transform.position.ToVector2(), m_cellSize);
 
@@ -176,10 +198,8 @@ namespace Code.Scripts.Runtime
             }
 
             Gizmos.color = Color.cyan;
-            foreach (var cell in m_characters)
+            foreach (var (pos, obj) in m_characters)
             {
-                var pos = cell.Key;
-                var obj = cell.Value;
                 var cellPosition = pos * m_cellSize + m_center;
                 Gizmos.DrawWireCube(cellPosition + transform.position.ToVector2(), m_cellSize);
 

@@ -27,5 +27,31 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e29c8b4a279724673a137a2ba0966ad6, type: 2}
   - {fileID: 11400000, guid: 0037cf3b178ae49e1a398459e36151ad, type: 2}
   - {fileID: 11400000, guid: ecf3deef8bd8c4a84a5ec224dbef65ed, type: 2}
+  m_resourceTiles:
+    _serializedList:
+    - Key: {fileID: 11400000, guid: 00df651ecc06445e8bbec0df20d2ad8f, type: 2}
+      Value:
+        m_min: 0
+        m_max: 0.35
+    - Key: {fileID: 11400000, guid: 869f651de734949339139e4a44fbfd76, type: 2}
+      Value:
+        m_min: 0.35
+        m_max: 0.6
+    - Key: {fileID: 11400000, guid: 5bca5207e47a74e2b8d3d1f5cfbb27fd, type: 2}
+      Value:
+        m_min: 0.6
+        m_max: 0.75
+    - Key: {fileID: 11400000, guid: 89d51307c38b24a17903b2f98679b804, type: 2}
+      Value:
+        m_min: 0.75
+        m_max: 0.85
+    - Key: {fileID: 11400000, guid: 64cd9e58a0bc045deb9a5da56f659e54, type: 2}
+      Value:
+        m_min: 0.85
+        m_max: 0.925
+    - Key: {fileID: 11400000, guid: e411fdb11ebf84d90a44ad88675d91e9, type: 2}
+      Value:
+        m_min: 0.925
+        m_max: 1
   m_secondaryFloorDensity: 0.1
   m_secondaryWallDensity: 0.15

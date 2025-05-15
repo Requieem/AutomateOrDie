@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AYellowpaper.SerializedCollections;
 using Code.Scripts.Runtime.GameResources;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class ResourcesBar : MonoBehaviour
     [SerializeField] private SerializedDictionary<Item, bool> m_activeAtStart;
     [SerializeField] private ResourceUI m_itemPrefab;
     [SerializeField] private GameState m_gameState;
+    [SerializeField] private List<Sprite> m_backgrounds;
+    [SerializeField] private Sprite m_defaultBackground;
 
     [Header("Debugging")]
     [SerializeField] private SerializedDictionary<Item, ResourceUI> m_instances;
@@ -31,6 +34,39 @@ public class ResourcesBar : MonoBehaviour
         }
 
         m_gameState.OnItemAppeared.AddListener(Show);
+        AdjustBackgrounds();
+    }
+
+    private void AdjustBackgrounds()
+    {
+        var keys = m_instances.Keys.ToList();
+        var keyCount = keys.Count;
+        var activeCount = -1;
+        ResourceUI firstInstance = null;
+        ResourceUI lastInstance = null;
+        for (int i = 0; i < keyCount; i++)
+        {
+            if(m_instances[keys[i]].gameObject.activeInHierarchy) activeCount++;
+            else continue;
+
+            var instance = m_instances[keys[i]];
+            var background = m_defaultBackground;
+
+            if (activeCount == 0)
+            {
+                firstInstance = instance;
+            }
+            else if (activeCount < m_backgrounds.Count )
+            {
+                background = m_backgrounds[activeCount];
+            }
+            lastInstance = instance;
+            instance.SetBackground(background);
+        }
+
+        if (activeCount <= 0) return;
+        firstInstance?.SetBackground(m_backgrounds[0]);
+        lastInstance?.SetBackground(m_backgrounds[^1]);
     }
 
     private void OnDestroy()
@@ -49,5 +85,6 @@ public class ResourcesBar : MonoBehaviour
     {
         if (!m_instances.TryGetValue(item, out var instance)) return;
         instance.gameObject.SetActive(show);
+        AdjustBackgrounds();
     }
 }
