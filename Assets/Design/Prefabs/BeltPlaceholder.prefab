@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2934959466936311605, guid: 143de29302fd84b1e86979957747e5a5, type: 3}
       propertyPath: m_Name
-      value: BeltPlaceholder Variant
+      value: BeltPlaceholder
       objectReference: {fileID: 0}
     - target: {fileID: 2986626457060949669, guid: 143de29302fd84b1e86979957747e5a5, type: 3}
       propertyPath: m_Size.y

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
 using Code.Scripts.Common;
+using Code.Scripts.Common.MyGame.Extensions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -19,6 +21,14 @@ namespace Code.Scripts.Runtime.GameResources
         [SerializeField] private ResourceState m_abundantState;
         [SerializeField] private ResourceState m_scarceState;
         [SerializeField] private ResourceState m_normalState;
+        [SerializeField] private TextMeshProUGUI m_alertText;
+        [SerializeField] private TextMeshProUGUI m_timerText;
+        [SerializeField] private AudioClip m_alertSound;
+        [SerializeField] private AudioClip m_lossSound;
+        [SerializeField] private GameObject m_endMenu;
+        [SerializeField] private float m_alertSmoothTime = 0.25f;
+        [SerializeField] private float m_alertDuration = 5f;
+        [SerializeField] private bool m_lost = false;
 
         [Header("Debugging")] [SerializeField] private SerializedDictionary<Item, float> m_currentItems;
         [SerializeField] private SerializedDictionary<Item, ResourceState> m_currentStates;
@@ -27,6 +37,7 @@ namespace Code.Scripts.Runtime.GameResources
         [SerializeField] private SerializedDictionary<Item, UnityEvent<float>> m_percentageEvents;
         [SerializeField] private UnityEvent<Item> m_onItemAppeared = new UnityEvent<Item>();
         [SerializeField] private bool m_performFastForward = false;
+        private Camera m_camera;
 
         public SerializedDictionary<Item, float> CurrentItems => m_currentItems;
         public SerializedDictionary<Item, float> MaxItems => m_maxItems;
@@ -39,6 +50,35 @@ namespace Code.Scripts.Runtime.GameResources
         public SerializedDictionary<Item, UnityEvent<float>> PercentageEvents => m_percentageEvents;
         public UnityEvent<Item> OnItemAppeared => m_onItemAppeared;
         public SerializedDictionary<Item, float> StartingItems => m_startingItems;
+        public bool Lost => m_lost;
+
+        public static GameState Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void Update()
+        {
+            if (Lost) return;
+            // if any three items are below 0, show end menu
+            var scarceItems = m_currentItems.Where(x => x.Value <= 0f).ToList();
+            if (scarceItems.Count >= 3)
+            {
+                m_endMenu.SetActive(true);
+                AudioSource.PlayClipAtPoint(m_lossSound, m_camera.transform.position, 0.75f);
+                StopAllCoroutines();
+                Time.timeScale = 0f;
+            }
+        }
 
         private void OnEnable()
         {
@@ -122,6 +162,7 @@ namespace Code.Scripts.Runtime.GameResources
 
         private void Start()
         {
+            m_camera = Camera.main;
             StartGame();
         }
 
@@ -145,28 +186,60 @@ namespace Code.Scripts.Runtime.GameResources
 
         private IEnumerator WaitForResourceAppearance()
         {
-            var lastTime = Time.time;
+            var lastTime = 0f;
             var elapsedTime = 0f;
             while (enabled)
             {
                 var target = m_appearanceTimes.Count;
                 var count = 0;
-                foreach (var appearance in m_appearanceTimes)
+                if (count != target)
                 {
-                    if (!(appearance.Value <= elapsedTime)) continue;
-                    count++;
+                    foreach (var appearance in m_appearanceTimes)
+                    {
+                        if (!(appearance.Value <= elapsedTime)) continue;
+                        count++;
 
-                    if (!(appearance.Value > lastTime)) continue;
-                    m_onItemAppeared.Invoke(appearance.Key);
-                }
-                if (count == target)
-                {
-                    yield break;
+                        if (!(appearance.Value > lastTime)) continue;
+                        m_onItemAppeared.Invoke(appearance.Key);
+                        StartCoroutine(ShowAlert(appearance.Key));
+                    }
                 }
 
+                lastTime = elapsedTime;
                 elapsedTime += ElapseTime();
+                // show timer text in format MM:SS
+                m_timerText.text = $"{(int) elapsedTime / 60:00}:{elapsedTime % 60:00}";
                 yield return null;
             }
+        }
+
+        private IEnumerator ScaleText(bool show)
+        {
+            var elapsedTime = 0f;
+            var targetScale = show ? Vector3.one : Vector3.zero;
+            var startScale = m_alertText.transform.localScale;
+            while (elapsedTime < m_alertSmoothTime)
+            {
+                elapsedTime += Time.deltaTime;
+                var t = Mathf.Clamp01(elapsedTime / m_alertSmoothTime);
+                m_alertText.transform.localScale = Vector3.Lerp(startScale, targetScale, t.EaseOutBounce());
+                yield return null;
+            }
+        }
+
+        private IEnumerator ShowAlert(Item item)
+        {
+            m_alertText.text = $"Automate {item.name} or <color=\"red\">DIE</color>!";
+            m_alertText.transform.localScale = Vector3.zero;
+            yield return ScaleText(true);
+
+            if(m_camera)
+                AudioSource.PlayClipAtPoint(m_alertSound, m_camera.transform.position, 0.75f);
+
+            yield return new WaitForSeconds(m_alertDuration);
+            yield return ScaleText(false);
+            m_alertText.text = string.Empty;
+            m_alertText.transform.localScale = Vector3.zero;
         }
 
         private float ElapseTime()
@@ -194,7 +267,6 @@ namespace Code.Scripts.Runtime.GameResources
         {
             if (!m_currentItems.TryGetValue(item, out var currentAmount)) return;
             if(!m_maxItems.TryGetValue(item, out var maxAmount)) return;
-            if (currentAmount <= 0f) return;
 
             var newAmount = currentAmount - amount;
             newAmount = Mathf.Max(newAmount, 0f);
@@ -204,6 +276,7 @@ namespace Code.Scripts.Runtime.GameResources
             m_valueEvents[item].Invoke(newAmount);
             m_percentageEvents[item].Invoke(newAmount / maxAmount);
         }
+
         public void OnBeforeSerialize()
         {
             //throw new System.NotImplementedException();

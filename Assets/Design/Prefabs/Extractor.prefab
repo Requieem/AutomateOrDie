@@ -173,8 +173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fc0d53de5584fba87b67f06608ad2cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_inputBelts: []
-  m_outputBelts: []
+  m_input: {fileID: 0}
+  m_output: {fileID: 0}
+  m_inputDirection: 0
+  m_outputDirection: 0
   m_resources:
     _serializedList:
     - Key: {fileID: 11400000, guid: 00df651ecc06445e8bbec0df20d2ad8f, type: 2}

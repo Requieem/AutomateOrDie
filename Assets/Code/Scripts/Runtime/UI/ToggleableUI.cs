@@ -25,7 +25,7 @@ namespace Code.Scripts.Runtime.UI
 
         [Header("Debugging")]
         [SerializeField] private float m_elapsedTime;
-        [SerializeField] private Vector3 m_initialPosition;
+        [SerializeField] private Vector2 m_initialPosition;
         [SerializeField] private float m_lastDuration;
         [SerializeField] private int m_state;
         [SerializeField] private int m_direction;
@@ -34,7 +34,7 @@ namespace Code.Scripts.Runtime.UI
 
         private void Awake()
         {
-            m_initialPosition = m_rectTransform.transform.position;
+            m_initialPosition = m_rectTransform.anchoredPosition;
             m_direction = 1;
         }
 
@@ -60,13 +60,13 @@ namespace Code.Scripts.Runtime.UI
         {
             if (state == 0) return m_initialPosition;
             if (state < 0 || state > m_offsets.Length)
-                return m_rectTransform.transform.position;
+                return m_rectTransform.anchoredPosition;
 
             var totalOffset = Vector2.zero;
             for (var i = 0; i < state; i++)
                 totalOffset += m_offsets[i];
 
-            return m_initialPosition + totalOffset.ToVector3();
+            return m_initialPosition + totalOffset;
         }
 
         private (int state, int direction) TryMove(int currentState, int currentDirection)
@@ -135,7 +135,7 @@ namespace Code.Scripts.Runtime.UI
             var additionalTime = GetAdditionalTime((prevState, prevDirection), (nextState, nextDirection));
             m_lastDuration += additionalTime;
             var easeType = m_easeTypes.GetValueOrDefault(nextState, m_fallbackEaseType);
-            var start = m_rectTransform.transform.position;
+            var start = m_rectTransform.anchoredPosition;
             var target = GetPosition(nextState);
 
             m_elapsedTime = 0f;
@@ -143,20 +143,20 @@ namespace Code.Scripts.Runtime.UI
             while (m_elapsedTime < m_lastDuration)
             {
                 var t = Mathf.Clamp01(m_elapsedTime / m_lastDuration);
-                m_rectTransform.transform.position = Vector3.Lerp(start, target, t.Ease(easeType));
+                m_rectTransform.anchoredPosition = Vector3.Lerp(start, target, t.Ease(easeType));
                 m_elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
-            m_rectTransform.transform.position = target;
+            m_rectTransform.anchoredPosition = target;
         }
 
         private void OnDrawGizmosSelected()
         {
             if (!m_rectTransform || m_offsets == null || m_offsets.Length < 1) return;
-            var current = m_rectTransform.transform.position.ToVector2();
+            var current = m_rectTransform.position.ToVector2();
             if(Application.isPlaying)
-                current = m_initialPosition.ToVector2();
+                current = m_initialPosition;
 
             var color = Color.HSVToRGB(0f, .75f, 0.65f);
             for (var i = 0; i < m_offsets.Length; i++)
@@ -165,7 +165,7 @@ namespace Code.Scripts.Runtime.UI
                 Gizmos.color = color;
                 color = Color.HSVToRGB(0.05f * i, .5f, .65f);
                 Gizmos.DrawLine(current, next);
-                Gizmos.DrawWireCube(next, m_rectTransform.rect.size);
+                Gizmos.DrawWireCube(next, m_rectTransform.sizeDelta);
                 current = next;
             }
         }

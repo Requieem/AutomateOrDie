@@ -14,33 +14,18 @@ namespace Code.Scripts.Runtime.BuildingSystem
         [SerializeField] private SerializedDictionary<Item, float> m_extractionRates;
         [SerializeField] private int m_capacity;
         [SerializeField] private int m_amount;
-        [SerializeField] private int m_beltIndex;
 
         private (Item item, float rate) m_currentExtraction;
+        private MonoItem m_currentItem;
+        public override bool AcceptsInput => false;
+        public override bool IsOccupied() => m_amount >= m_capacity;
 
-        private void Start()
+        protected override void Setup()
         {
+            base.Setup();
             DetectResource();
-            DetectBelts();
             StartCoroutine(Extract());
             StartCoroutine(Distribute());
-        }
-
-        private void DetectBelts()
-        {
-            var gridManager = GridManager.Instance;
-            var worldPos = transform.position;
-            gridManager.TrySnapPosition(worldPos.ToVector2(), out var snappedPos);
-            gridManager.WorldToGrid(snappedPos, out var gridPos);
-            foreach (var dir in Belt.DirectionVectors())
-            {
-                var neighborPos = gridPos + dir.Item2;
-                if (!gridManager.TryGetBelt(neighborPos, out var belt)) continue;
-
-                if (belt.InputBuilding != null || belt.InputBelt != null) continue;
-                if(belt.SetInputBuilding(this, Belt.Opposite(dir.Item1)))
-                    AddOutputBelt(belt);
-            }
         }
 
         private void DetectResource()
@@ -78,21 +63,26 @@ namespace Code.Scripts.Runtime.BuildingSystem
             {
                 yield return new WaitForSeconds(m_currentExtraction.rate);
                 yield return new WaitUntil(() => m_amount > 0);
-                yield return new WaitUntil(() => m_beltIndex >= 0 && m_beltIndex < m_outputBelts.Count);
+                yield return new WaitUntil(() => m_output);
 
                 var newItem = Instantiate(m_currentExtraction.item.ItemPrefab, transform.position, Quaternion.identity);
                 newItem.Initialize(m_currentExtraction.item);
-                var outputBelt = m_outputBelts[m_beltIndex];
-                while (outputBelt.IsOccupied())
-                {
-                    yield return new WaitUntil(() => m_outputBelts.Count < 0);
-                    m_beltIndex = (m_beltIndex + 1) % m_outputBelts.Count;
-                    outputBelt = m_outputBelts[m_beltIndex];
-                    yield return null;
-                }
-                outputBelt.ReceiveItem(newItem);
+                m_currentItem = newItem;
+                m_output.ReceiveItem(newItem);
+                m_currentItem = null;
                 m_amount--;
-                m_beltIndex = (m_beltIndex + 1) % m_outputBelts.Count;
+            }
+        }
+
+        protected override void CleanUp()
+        {
+            StopAllCoroutines();
+
+            // Destroy any item that is currently in the extractor
+            if (m_currentItem && m_currentItem.gameObject)
+            {
+                Destroy(m_currentItem.gameObject);
+                m_currentItem = null;
             }
         }
 

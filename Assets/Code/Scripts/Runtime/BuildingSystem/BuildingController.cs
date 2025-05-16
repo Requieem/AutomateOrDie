@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Code.Scripts.Runtime.Cursors;
+using Code.Scripts.Runtime.GameResources;
 using Code.Scripts.Runtime.Grid;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,6 +17,10 @@ namespace Code.Scripts.Runtime.BuildingSystem
         [SerializeField] private List<Building> m_buildings;
         [SerializeField] private CursorController m_cursorController;
         [SerializeField] private InputActionReference m_changeIndexAction;
+        [SerializeField] private AudioClip m_startBuildingSound;
+        [SerializeField] private AudioClip m_cancelBuildingSound;
+        [SerializeField] private AudioClip m_buildingSound;
+        [SerializeField] private AudioClip m_destroySound;
 
         [FormerlySerializedAs("m_buildAction")] [SerializeField]
         private InputActionReference m_startBuildAction;
@@ -50,6 +55,7 @@ namespace Code.Scripts.Runtime.BuildingSystem
             m_changeIndexAction.action.performed += OnChangeIndex;
             m_startBuildAction.action.performed += OnBuild;
             m_cancelAction.action.performed += OnCancel;
+            m_cursorController.MarkerTransform.gameObject.SetActive(false);
         }
 
         private void OnDestroy()
@@ -77,6 +83,8 @@ namespace Code.Scripts.Runtime.BuildingSystem
 
         private void OnBuild(InputAction.CallbackContext context)
         {
+            if(Time.timeScale == 0) return;
+            if (GameState.Instance.Lost) return;
             if (!context.performed) return;
             if (m_isBuilding && m_builder == this)
             {
@@ -89,6 +97,8 @@ namespace Code.Scripts.Runtime.BuildingSystem
 
         private void OnConfirm(InputAction.CallbackContext context)
         {
+            if (Time.timeScale == 0) return;
+            if (GameState.Instance.Lost) return;
             if (!context.performed) return;
             if (!m_isBuilding) return;
             if (m_builder != this) return;
@@ -103,11 +113,17 @@ namespace Code.Scripts.Runtime.BuildingSystem
                 Quaternion.identity);
 
             m_buildingInstances.Add(buildingInstance);
-            CancelBuild(this);
+
+            if(Camera.main)
+                AudioSource.PlayClipAtPoint(m_buildingSound, Camera.main.transform.position, 0.75f);
+
+            CancelBuild(this, false);
         }
 
         private void OnCancel(InputAction.CallbackContext context)
         {
+            if (Time.timeScale == 0) return;
+            if (GameState.Instance.Lost) return;
             if (!context.performed) return;
             switch (m_isBuilding)
             {
@@ -137,6 +153,8 @@ namespace Code.Scripts.Runtime.BuildingSystem
 
             gridManager.TryRemoveBuilding(selectedPosition);
             gridManager.TryRemoveBelt(selectedPosition);
+            if (Camera.main)
+                AudioSource.PlayClipAtPoint(m_destroySound, Camera.main.transform.position, 0.5f);
         }
 
         public bool TryBuild(Object builder, out Building building)
@@ -150,6 +168,7 @@ namespace Code.Scripts.Runtime.BuildingSystem
             if (m_buildIndex < 0 || m_buildIndex >= m_buildings.Count)
                 throw new System.Exception("Building index out of range. This should never happen");
 
+            m_cursorController.MarkerTransform.gameObject.SetActive(true);
             m_isBuilding = true;
             m_builder = builder;
             building = m_buildings[m_buildIndex];
@@ -158,10 +177,14 @@ namespace Code.Scripts.Runtime.BuildingSystem
             m_placeholder.transform.localPosition = Vector3.zero;
             m_placeholder.SetValid(true);
             m_buildingPrefab = building;
+
+            if (Camera.main != null)
+                AudioSource.PlayClipAtPoint(m_startBuildingSound, Camera.main.transform.position, 0.75f);
+
             return true;
         }
 
-        public bool CancelBuild(Object builder)
+        public bool CancelBuild(Object builder, bool playSound = true)
         {
             if (!m_isBuilding)
                 return false;
@@ -177,7 +200,12 @@ namespace Code.Scripts.Runtime.BuildingSystem
                 m_placeholder = null;
             }
 
+            m_cursorController.MarkerTransform.gameObject.SetActive(false);
             m_buildingPrefab = null;
+
+            if (playSound && Camera.main)
+                AudioSource.PlayClipAtPoint(m_cancelBuildingSound, Camera.main.transform.position, 0.75f);
+
             return true;
         }
 

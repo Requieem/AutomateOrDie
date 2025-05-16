@@ -18,6 +18,7 @@ public class FactoryFloorGenerator : MonoBehaviour
     [SerializeField] private int m_smoothIterations = 5;
     [SerializeField] private float m_resourceDensity = 0.25f;
     [SerializeField] private LevelPack m_levelPack;
+    [SerializeField] private Transform m_player;
 
     [Header("Tilemap")]
     [FormerlySerializedAs("m_environmentTilemap")]
@@ -41,6 +42,10 @@ public class FactoryFloorGenerator : MonoBehaviour
         m_resourcesTilemap.size = new Vector3Int(m_width, m_height, 1);
         m_resourcesTilemap.origin = new Vector3Int(0, -m_height, 0);
         m_resourcesTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin
+
+        // Time based seed
+        m_seed = (int)(System.DateTime.Now.Ticks % int.MaxValue);
+
         Generate();
     }
 
@@ -145,6 +150,41 @@ public class FactoryFloorGenerator : MonoBehaviour
             m_wallTilemap.SetTile(cellPos, null);
             m_resourcesTilemap.SetTile(cellPos, randomTile);
         }
+
+        var position = GetRandomFreeFloorWorldPosition();
+        if (position != null)
+        {
+            m_player.position = position.Value;
+        }
+        else
+        {
+            Debug.LogWarning("No free floor positions found for player spawn.");
+        }
+    }
+
+    public Vector3? GetRandomFreeFloorWorldPosition()
+    {
+        List<Vector3Int> freeCells = new List<Vector3Int>();
+
+        // Loop through all used positions in the floor tilemap
+        foreach (var position in m_floorTilemap.cellBounds.allPositionsWithin)
+        {
+            if (!m_floorTilemap.HasTile(position)) continue;
+
+            if (!m_wallTilemap.HasTile(position) && !m_resourcesTilemap.HasTile(position))
+            {
+                freeCells.Add(position);
+            }
+        }
+
+        if (freeCells.Count == 0)
+        {
+            Debug.LogWarning("No free floor positions found.");
+            return null;
+        }
+
+        var chosenCell = freeCells[Random.Range(0, freeCells.Count)];
+        return m_floorTilemap.GetCellCenterWorld(chosenCell);
     }
 
     private bool IsWall(int x, int y)

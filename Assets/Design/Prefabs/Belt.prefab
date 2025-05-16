@@ -152,13 +152,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a22c35a0e64897bbf1b775223b2d73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_building: {fileID: 4703735960011917302}
-  m_beltType: 0
+  m_input: {fileID: 0}
+  m_output: {fileID: 0}
   m_inputDirection: 0
   m_outputDirection: 0
-  m_inputBelt: {fileID: 0}
-  m_outputBelt: {fileID: 0}
-  m_inputBuilding: {fileID: 0}
+  m_building: {fileID: 4703735960011917302}
+  m_beltType: 0
   m_tiles:
     _serializedList:
     - Key: 0
@@ -188,5 +187,3 @@ MonoBehaviour:
     - Key: 12
       Value: {fileID: 11400000, guid: 4695f087bc3f4490385a2dc1072ec203, type: 2}
   m_time: 0.15
-  m_wait: 0
-  m_moving: 0
