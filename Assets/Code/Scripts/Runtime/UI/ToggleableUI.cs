@@ -6,7 +6,7 @@ using Code.Scripts.Common.MyGame.Extensions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Code.Scripts.Runtime
+namespace Code.Scripts.Runtime.UI
 {
     public class ToggleableUI : MonoBehaviour
     {

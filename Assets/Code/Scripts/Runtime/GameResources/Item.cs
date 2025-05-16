@@ -5,7 +5,7 @@ namespace Code.Scripts.Runtime.GameResources
     [CreateAssetMenu(fileName = "Item", menuName = "Gameplay/Item", order = 0)]
     public class Item : Identifier
     {
-        [SerializeField] private SpriteRenderer m_itemPrefab;
-        public SpriteRenderer ItemPrefab => m_itemPrefab;
+        [SerializeField] private MonoItem m_itemPrefab;
+        public MonoItem ItemPrefab => m_itemPrefab;
     }
 }

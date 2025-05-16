@@ -1,8 +1,8 @@
-namespace Code.Scripts.Common
-{
 using UnityEngine;
 
-namespace MyGame.Extensions
+namespace Code.Scripts.Common
+{
+    namespace MyGame.Extensions
 {
     public enum EaseType
     {

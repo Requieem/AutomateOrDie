@@ -1,15 +1,13 @@
 using System.Collections.Generic;
-using System.Linq;
 using Code.Scripts.Common;
-
-namespace Code.Scripts.Runtime
-{
-
-using Levels;
+using Code.Scripts.Runtime.Levels;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
-[RequireComponent(typeof(GridManager))]
+namespace Code.Scripts.Runtime.Grid
+{
+    [RequireComponent(typeof(GridManager))]
 public class FactoryFloorGenerator : MonoBehaviour
 {
     [Header("Generation Settings")]
@@ -22,7 +20,8 @@ public class FactoryFloorGenerator : MonoBehaviour
     [SerializeField] private LevelPack m_levelPack;
 
     [Header("Tilemap")]
-    [SerializeField] private Tilemap m_environmentTilemap;
+    [FormerlySerializedAs("m_environmentTilemap")]
+    [SerializeField] private Tilemap m_floorTilemap;
     [SerializeField] private Tilemap m_wallTilemap;
     [SerializeField] private Tilemap m_resourcesTilemap;
 
@@ -33,9 +32,9 @@ public class FactoryFloorGenerator : MonoBehaviour
     {
         m_gridManager = GetComponent<GridManager>();
         m_gridManager.SetBounds(new Vector2(m_width, m_height));
-        m_environmentTilemap.size = new Vector3Int(m_width, m_height, 1);
-        m_environmentTilemap.origin = new Vector3Int(0, -m_height, 0);
-        m_environmentTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin
+        m_floorTilemap.size = new Vector3Int(m_width, m_height, 1);
+        m_floorTilemap.origin = new Vector3Int(0, -m_height, 0);
+        m_floorTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin
         m_wallTilemap.size = new Vector3Int(m_width, m_height, 1);
         m_wallTilemap.origin = new Vector3Int(0, -m_height, 0);
         m_wallTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin
@@ -102,9 +101,9 @@ public class FactoryFloorGenerator : MonoBehaviour
 
     private void ApplyToTilemap()
     {
-        if (m_environmentTilemap == null) return;
+        if (m_floorTilemap == null) return;
 
-        m_environmentTilemap.ClearAllTiles();
+        m_floorTilemap.ClearAllTiles();
         m_wallTilemap.ClearAllTiles();
         m_resourcesTilemap.ClearAllTiles();
 
@@ -115,13 +114,19 @@ public class FactoryFloorGenerator : MonoBehaviour
             var cellPos = new Vector3Int(x, -y, 0); // Match grid top-left origin
             var isWall = IsWall(x, y);
             var randomTile = !isWall ? m_levelPack.RandomFloorAt(cellPos.ToVector2Int()) : m_levelPack.RandomWallAt(cellPos.ToVector2Int());
-            if(!m_gridManager.TryAddEnvironment(cellPos.ToVector2Int(), randomTile))
-                continue;
             if(randomTile == null) continue;
-            if(!isWall)
-                m_environmentTilemap.SetTile(cellPos, randomTile);
+            if (!isWall)
+            {
+                if(!m_gridManager.TryAddFloor(cellPos.ToVector2Int(), randomTile))
+                    continue;
+                m_floorTilemap.SetTile(cellPos, randomTile);
+            }
             else
+            {
+                if(!m_gridManager.TryAddWall(cellPos.ToVector2Int(), randomTile))
+                    continue;
                 m_wallTilemap.SetTile(cellPos, randomTile);
+            }
         }
 
         var resourcePositions = GetResourcePositions(m_resourceDensity);
@@ -132,10 +137,11 @@ public class FactoryFloorGenerator : MonoBehaviour
             if (randomTile == null) continue;
             if (!m_gridManager.TryAddResource(cellPos.ToVector2Int(), randomTile))
                 continue;
-            m_gridManager.TryRemoveEnvironment(cellPos.ToVector2Int());
-            m_gridManager.TryRemoveStructure(cellPos.ToVector2Int());
+            m_gridManager.TryRemoveFloor(cellPos.ToVector2Int());
+            m_gridManager.TryRemoveWall(cellPos.ToVector2Int());
+            m_gridManager.TryRemoveBuilding(cellPos.ToVector2Int());
             m_gridManager.TryRemoveCharacter(cellPos.ToVector2Int());
-            m_environmentTilemap.SetTile(cellPos, null);
+            m_floorTilemap.SetTile(cellPos, null);
             m_wallTilemap.SetTile(cellPos, null);
             m_resourcesTilemap.SetTile(cellPos, randomTile);
         }
@@ -159,7 +165,7 @@ public class FactoryFloorGenerator : MonoBehaviour
             for (var y = 0; y < m_height; y++)
             {
                 var pos = new Vector3Int(x, -y, 0); // grid convention
-                if (m_environmentTilemap.HasTile(pos) &&
+                if (m_floorTilemap.HasTile(pos) &&
                     !m_wallTilemap.HasTile(pos) &&
                     (m_resourcesTilemap == null || !m_resourcesTilemap.HasTile(pos)))
                 {

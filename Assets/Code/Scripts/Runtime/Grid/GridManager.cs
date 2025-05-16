@@ -1,26 +1,60 @@
 using AYellowpaper.SerializedCollections;
 using Code.Scripts.Common;
+using Code.Scripts.Runtime.BuildingSystem;
 using Code.Scripts.Runtime.Characters;
-using Code.Scripts.Runtime.Structures;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Code.Scripts.Runtime
+namespace Code.Scripts.Runtime.Grid
 {
     public class GridManager : MonoBehaviour
     {
         [SerializeField] private Vector2 m_center;
         [SerializeField] private Vector2 m_cellSize;
         [SerializeField] private Vector2 m_bounds;
-        [SerializeField] private SerializedDictionary<Vector2Int, Structure> m_structures;
+        [SerializeField] private SerializedDictionary<Vector2Int, Building> m_buildings;
+        [SerializeField] private SerializedDictionary<Vector2Int, Belt> m_belts;
         [SerializeField] private SerializedDictionary<Vector2Int, Tile> m_resources;
-        [SerializeField] private SerializedDictionary<Vector2Int, Tile> m_environment;
+        [SerializeField] private SerializedDictionary<Vector2Int, Tile> m_floor;
+        [SerializeField] private SerializedDictionary<Vector2Int, Tile> m_walls;
         [SerializeField] private SerializedDictionary<Vector2Int, Character> m_characters;
+        [SerializeField] private Tilemap m_buildingsTilemap;
+        [SerializeField] private Tilemap m_resourcesTilemap;
+        [SerializeField] private Tilemap m_floorTilemap;
+        [SerializeField] private Tilemap m_wallsTilemap;
+        [SerializeField] private Tilemap m_charactersTilemap;
+
+        public static GridManager Instance { get; private set; }
+        public Tilemap BuildingsTilemap => m_buildingsTilemap;
+        public Tilemap ResourcesTilemap => m_resourcesTilemap;
+        public Tilemap FloorTilemap => m_floorTilemap;
+        public Tilemap WallsTilemap => m_wallsTilemap;
+        public Tilemap CharactersTilemap => m_charactersTilemap;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                if(Application.isPlaying)
+                    Destroy(gameObject);
+                else
+                    DestroyImmediate(gameObject);
+            }
+        }
 
         public Vector2 Center => m_center;
         public Vector2 CellSize => m_cellSize;
         public Vector2 Bounds => m_bounds;
 
+        public void SetSelectedCell(Vector2Int? position)
+        {
+            SelectedCell = position;
+        }
         public void SetCenter(Vector2 center)
         {
             m_center = center;
@@ -36,9 +70,9 @@ namespace Code.Scripts.Runtime
 
         public bool TryGetCell(Vector2Int position, out GameObject obj)
         {
-            if(TryGetStructure(position, out var structure) && structure && structure.gameObject)
+            if(TryGetBuilding(position, out var building) && building && building.gameObject)
             {
-                obj = structure.gameObject;
+                obj = building.gameObject;
                 return true;
             }
             if (TryGetCharacter(position, out var character) && character && character.gameObject)
@@ -46,9 +80,24 @@ namespace Code.Scripts.Runtime
                 obj = character.gameObject;
                 return true;
             }
-            if (TryGetEnvironment(position, out var tile) && tile && tile.gameObject)
+            if (TryGetFloor(position, out var tile) && tile && tile.gameObject)
             {
                 obj = tile.gameObject;
+                return true;
+            }
+            if (TryGetWall(position, out tile) && tile && tile.gameObject)
+            {
+                obj = tile.gameObject;
+                return true;
+            }
+            if (TryGetResource(position, out tile) && tile && tile.gameObject)
+            {
+                obj = tile.gameObject;
+                return true;
+            }
+            if (TryGetBelt(position, out var belt) && belt && belt.gameObject)
+            {
+                obj = belt.gameObject;
                 return true;
             }
             obj = null;
@@ -89,9 +138,42 @@ namespace Code.Scripts.Runtime
             return true;
         }
 
-        public bool TryAddStructure(Vector2Int position, Structure structure)
+        public void WorldToGrid(Vector3 worldPosition, out Vector2Int gridPosition)
         {
-            return !TryGetCell(position, out _) && m_structures.TryAdd(position, structure);
+            var cellSize = m_cellSize;
+            var bounds = m_bounds;
+
+            // Top-left of grid in world space
+            var gridOrigin = transform.position.ToVector2() + m_center;
+            // Compute total grid size
+            var gridSize = new Vector2(bounds.x * cellSize.x, bounds.y * cellSize.y);
+            // Bottom-right corner
+            var gridMin = gridOrigin + new Vector2(0, -gridSize.y);
+            var gridMax = gridOrigin + new Vector2(gridSize.x, 0);
+            // Bounds check
+            if (worldPosition.x < gridOrigin.x || worldPosition.x > gridMax.x ||
+                worldPosition.y > gridOrigin.y || worldPosition.y < gridMin.y)
+            {
+                gridPosition = Vector2Int.zero;
+                return;
+            }
+
+            // Local offset from top-left
+            var offset = worldPosition.ToVector2() - gridOrigin;
+            var x = Mathf.RoundToInt(offset.x / cellSize.x);
+            var y = Mathf.RoundToInt(-offset.y / cellSize.y); // Flip Y since the grid is top-down
+            // Reconstruct the snapped position (center of cell)
+            gridPosition = new Vector2Int(x, -y);
+        }
+
+        public bool TryAddBuilding(Vector2Int position, Building building)
+        {
+            return !TryGetCell(position, out _) && m_buildings.TryAdd(position, building);
+        }
+
+        public bool TryAddBelt(Vector2Int position, Belt belt)
+        {
+            return m_belts.TryAdd(position, belt);
         }
 
         public bool TryAddCharacter(Vector2Int position, Character character)
@@ -99,9 +181,14 @@ namespace Code.Scripts.Runtime
             return !TryGetCell(position, out _) && m_characters.TryAdd(position, character);
         }
 
-        public bool TryAddEnvironment(Vector2Int position, Tile tile)
+        public bool TryAddFloor(Vector2Int position, Tile tile)
         {
-            return !TryGetCell(position, out _) && m_environment.TryAdd(position, tile);
+            return !TryGetCell(position, out _) && m_floor.TryAdd(position, tile);
+        }
+
+        public bool TryAddWall(Vector2Int position, Tile tile)
+        {
+            return !TryGetCell(position, out _) && m_walls.TryAdd(position, tile);
         }
 
         public bool TryAddResource(Vector2Int position, Tile tile)
@@ -109,9 +196,14 @@ namespace Code.Scripts.Runtime
             return !TryGetCell(position, out _) && m_resources.TryAdd(position, tile);
         }
 
-        public bool TryRemoveStructure(Vector2Int position)
+        public bool TryRemoveBuilding(Vector2Int position)
         {
-            return m_structures.Remove(position);
+            return m_buildings.Remove(position);
+        }
+
+        public bool TryRemoveBelt(Vector2Int position)
+        {
+            return m_belts.Remove(position);
         }
 
         public bool TryRemoveCharacter(Vector2Int position)
@@ -119,9 +211,14 @@ namespace Code.Scripts.Runtime
             return m_characters.Remove(position);
         }
 
-        public bool TryRemoveEnvironment(Vector2Int position)
+        public bool TryRemoveFloor(Vector2Int position)
         {
-            return m_environment.Remove(position);
+            return m_floor.Remove(position);
+        }
+
+        public bool TryRemoveWall(Vector2Int position)
+        {
+            return m_walls.Remove(position);
         }
 
         public bool TryRemoveResource(Vector2Int position)
@@ -129,9 +226,14 @@ namespace Code.Scripts.Runtime
             return m_resources.Remove(position);
         }
 
-        public bool TryGetStructure(Vector2Int position, out Structure structure)
+        public bool TryGetBuilding(Vector2Int position, out Building building)
         {
-            return m_structures.TryGetValue(position, out structure);
+            return m_buildings.TryGetValue(position, out building);
+        }
+
+        public bool TryGetBelt(Vector2Int position, out Belt belt)
+        {
+            return m_belts.TryGetValue(position, out belt);
         }
 
         public bool TryGetCharacter(Vector2Int position, out Character character)
@@ -139,14 +241,34 @@ namespace Code.Scripts.Runtime
             return m_characters.TryGetValue(position, out character);
         }
 
-        public bool TryGetEnvironment(Vector2Int position, out Tile tile)
+        public bool TryGetFloor(Vector2Int position, out Tile tile)
         {
-            return m_environment.TryGetValue(position, out tile);
+            return m_floor.TryGetValue(position, out tile);
+        }
+
+        public bool TryGetWall(Vector2Int position, out Tile tile)
+        {
+            return m_walls.TryGetValue(position, out tile);
         }
 
         public bool TryGetResource(Vector2Int position, out Tile tile)
         {
             return m_resources.TryGetValue(position, out tile);
+        }
+
+        public bool CanPlaceBuilding(Vector2Int position, bool needsResource = false)
+        {
+            var hasResource = m_resources.ContainsKey(position);
+            var hasBuilding = m_buildings.ContainsKey(position);
+            var hasWall = m_walls.ContainsKey(position);
+            var hasFloor = m_floor.ContainsKey(position);
+
+            return needsResource switch
+            {
+                true when !hasResource => false,
+                true => true,
+                _ => hasFloor && !(hasBuilding || hasWall || hasResource)
+            };
         }
 
         public Vector2Int? SelectedCell { get; set; }
@@ -168,7 +290,7 @@ namespace Code.Scripts.Runtime
             }
 
             Gizmos.color = Color.magenta;
-            foreach (var (pos, obj) in m_structures)
+            foreach (var (pos, obj) in m_buildings)
             {
                 var cellPosition = pos * m_cellSize + m_center;
                 Gizmos.DrawWireCube(cellPosition + transform.position.ToVector2(), m_cellSize);
@@ -178,7 +300,7 @@ namespace Code.Scripts.Runtime
             }
 
             Gizmos.color = Color.red;
-            foreach (var (pos, obj) in m_environment)
+            foreach (var (pos, _) in m_floor)
             {
                 var cellPosition = pos * m_cellSize + m_center;
                 Gizmos.DrawWireCube(cellPosition + transform.position.ToVector2(), m_cellSize);

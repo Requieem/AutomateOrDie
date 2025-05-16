@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Copper
   m_EditorClassIdentifier: 
   m_sprite: {fileID: -9118911526106501697, guid: 3a3bc3741fce24d89a7fa4dd4317d300, type: 3}
-  m_icon: {fileID: 0}
   m_hintColor: {r: 0.73333335, g: 0.46666667, b: 0.23529412, a: 1}
-  m_itemPrefab: {fileID: 5950711125924906911, guid: a2f786278d000497eb778036be8c228a, type: 3}
+  m_itemPrefab: {fileID: 384541548464991361, guid: 49ec487d1835b4fa4b11c1118bbe49ec, type: 3}

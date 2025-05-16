@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_sprite: {fileID: -394481449, guid: 3a3bc3741fce24d89a7fa4dd4317d300, type: 3}
   m_hintColor: {r: 0.5137255, g: 0.44705883, b: 0.105882354, a: 1}
-  m_itemPrefab: {fileID: 5950711125924906911, guid: a2f786278d000497eb778036be8c228a, type: 3}
+  m_itemPrefab: {fileID: 384541548464991361, guid: 49ec487d1835b4fa4b11c1118bbe49ec, type: 3}

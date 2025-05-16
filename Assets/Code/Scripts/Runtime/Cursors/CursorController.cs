@@ -1,7 +1,9 @@
+using Code.Scripts.Common;
+using Code.Scripts.Runtime.Grid;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Code.Scripts.Runtime.Cursor
+namespace Code.Scripts.Runtime.Cursors
 {
     public class CursorController : MonoBehaviour
     {
@@ -12,7 +14,12 @@ namespace Code.Scripts.Runtime.Cursor
         [SerializeField] private InputActionReference m_positionAction; // e.g. mouse position
         [SerializeField] private InputActionReference m_deltaAction;    // e.g. right stick delta
         [SerializeField] private float m_movementSpeed = 500f; // pixels per second
+        [SerializeField] private Color m_validColor = Color.green;
+        [SerializeField] private Color m_invalidColor = Color.red;
+        [SerializeField] private Transform m_characterTransform;
+        [SerializeField] private int m_maxCellDistance = 2;
 
+        public Transform MarkerTransform => m_markerSpriteRenderer.transform;
         private Vector2 m_cursorWorldPosition;
 
         private void OnEnable()
@@ -68,14 +75,26 @@ namespace Code.Scripts.Runtime.Cursor
             {
                 if (m_gridManager.TrySnapPosition(m_cursorWorldPosition, out var snappedPosition))
                 {
-                    m_markerSpriteRenderer.enabled = true;
-                    m_markerSpriteRenderer.transform.position = snappedPosition;
+                    if (Vector3.Distance(m_characterTransform.position, snappedPosition.ToVector3()) / m_gridManager.CellSize.magnitude <
+                        m_maxCellDistance)
+                    {
+                        m_markerSpriteRenderer.enabled = true;
+                        m_markerSpriteRenderer.transform.position = snappedPosition;
+                        m_gridManager.WorldToGrid(snappedPosition.ToVector3(), out var gridPos);
+                        m_gridManager.SetSelectedCell(gridPos);
+                    }
                 }
                 else
                 {
+                    m_gridManager.SetSelectedCell(null);
                     m_markerSpriteRenderer.enabled = false;
                 }
             }
+        }
+
+        public void SetValid(bool valid)
+        {
+            m_markerSpriteRenderer.color = valid ? m_validColor : m_invalidColor;
         }
     }
 }

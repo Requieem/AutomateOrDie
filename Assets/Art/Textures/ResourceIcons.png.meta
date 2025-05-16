@@ -453,6 +453,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: ResourceIcons_14
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0635dcdff370148e9a118582139b539b
+      internalID: -257218557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -473,6 +495,7 @@ TextureImporter:
       ResourceIcons_11: 4369013235863079413
       ResourceIcons_12: 81959136
       ResourceIcons_13: -394481449
+      ResourceIcons_14: -257218557
       ResourceIcons_2: -9118911526106501697
       ResourceIcons_3: -6673149370267212445
       ResourceIcons_4: -735653095550665484
