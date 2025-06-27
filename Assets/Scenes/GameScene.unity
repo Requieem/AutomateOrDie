@@ -2852,7 +2852,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -22.5, y: -20.7}
+  m_AnchoredPosition: {x: -22.5, y: -20.699951}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &773941716
@@ -3199,7 +3199,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'You better find out the other commands on your own.
 
-    <color=red>ESC</color>
+    <color=red>SPACE</color>
     or <color=red>START</color> to toggle this menu'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fbbd76ee52e3a495292dfa2a54d2da94, type: 2}
@@ -4313,7 +4313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <color=red>WASD</color> OR <color=red>STICK</color>TO MOVE
+  m_text: <color=red>WASD</color> OR <color=red> LEFT STICK</color>TO MOVE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fbbd76ee52e3a495292dfa2a54d2da94, type: 2}
   m_sharedMaterial: {fileID: -42272517239457924, guid: fbbd76ee52e3a495292dfa2a54d2da94, type: 2}
@@ -4644,7 +4644,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -22.5, y: -20.7}
+  m_AnchoredPosition: {x: -22.5, y: -20.699951}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1365535081

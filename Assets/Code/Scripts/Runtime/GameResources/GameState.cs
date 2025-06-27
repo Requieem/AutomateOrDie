@@ -74,7 +74,7 @@ namespace Code.Scripts.Runtime.GameResources
             if (scarceItems.Count >= 3)
             {
                 m_endMenu.SetActive(true);
-                AudioSource.PlayClipAtPoint(m_lossSound, m_camera.transform.position, 0.75f);
+                AudioSource.PlayClipAtPoint(m_lossSound, m_camera.transform.position, 0.25f);
                 StopAllCoroutines();
                 Time.timeScale = 0f;
             }
