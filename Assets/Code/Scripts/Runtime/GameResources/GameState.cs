@@ -73,8 +73,9 @@ namespace Code.Scripts.Runtime.GameResources
             var scarceItems = m_currentItems.Where(x => x.Value <= 0f).ToList();
             if (scarceItems.Count >= 3)
             {
+                m_lost = true;
                 m_endMenu.SetActive(true);
-                AudioSource.PlayClipAtPoint(m_lossSound, m_camera.transform.position, 0.25f);
+                AudioSource.PlayClipAtPoint(m_lossSound, m_camera.transform.position, 0.5f);
                 StopAllCoroutines();
                 Time.timeScale = 0f;
             }

@@ -171,6 +171,20 @@ namespace Code.Scripts.Runtime.Grid
             return !TryGetCell(position, out _) && m_buildings.TryAdd(position, building);
         }
 
+        public bool TryAddBuilding(Building building)
+        {
+            var position = SelectedCell;
+            if (position.HasValue)
+            {
+                return !TryGetCell(position.Value, out _) && m_buildings.TryAdd(position.Value, building);
+            }
+            else
+            {
+                Debug.LogWarning("Cannot add building: no selected cell.");
+                return false;
+            }
+        }
+
         public bool TryAddBelt(Vector2Int position, Belt belt)
         {
             return m_belts.TryAdd(position, belt);

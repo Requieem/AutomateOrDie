@@ -44,8 +44,7 @@ namespace Code.Scripts.Runtime.BuildingSystem
 
                     Debug.Log($"Tile: {tile.name} at {cell} -> {worldPos}");
 
-                    gridManager.WorldToGrid(worldPos, out var gridPos);
-                    gridManager.TryAddBuilding(gridPos, this);
+                    gridManager.TryAddBuilding(this);
                 }
             }
         }

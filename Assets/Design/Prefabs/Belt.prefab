@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1026950050969526442, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_TileAnchor.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1026950050969526442, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_AnimationFrameRate
       value: 8
       objectReference: {fileID: 0}
@@ -16,6 +20,22 @@ PrefabInstance:
       propertyPath: m_placeholderPrefab
       value: 
       objectReference: {fileID: 555242201593563248, guid: 57baf6032519942f9b4987003eaeea88, type: 3}
+    - target: {fileID: 3589110306106397329, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825360336007711582, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3955278546519908019, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4387521750554926501, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4432995105092437650, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_Name
       value: Belt
@@ -60,6 +80,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5951716172894188412, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844352359711705925, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_TileAnchor.y
+      value: -0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6844352359711705925, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_AnimationFrameRate
       value: 8
@@ -67,6 +95,10 @@ PrefabInstance:
     - target: {fileID: 7930167452891621465, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_Size.y
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930167452891621465, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_TileAnchor.y
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7930167452891621465, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_Tiles.Array.size
@@ -110,7 +142,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8153709404159376206, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_SortingOrder
-      value: 3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8326823082064035612, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600508344370744933, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_TileAnchor.y
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8600508344370744933, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_AnimationFrameRate

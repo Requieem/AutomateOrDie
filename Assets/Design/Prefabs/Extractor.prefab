@@ -146,7 +146,11 @@ PrefabInstance:
       objectReference: {fileID: 7357712366562820920, guid: 22233593c2cec4101a9d5bcf6f931a15, type: 3}
     - target: {fileID: 8153709404159376206, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_SortingOrder
-      value: 5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8153709404159376206, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

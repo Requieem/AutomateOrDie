@@ -38,7 +38,6 @@ public class FactoryFloorGenerator : MonoBehaviour
         m_floorTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin
         m_wallTilemap.size = new Vector3Int(m_width, m_height, 1);
         m_wallTilemap.origin = new Vector3Int(0, -m_height, 0);
-        m_wallTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin
         m_resourcesTilemap.size = new Vector3Int(m_width, m_height, 1);
         m_resourcesTilemap.origin = new Vector3Int(0, -m_height, 0);
         m_resourcesTilemap.tileAnchor = Vector3.zero;// Match grid top-left origin

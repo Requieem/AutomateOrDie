@@ -59,7 +59,8 @@ namespace Code.Scripts.Runtime.BuildingSystem
             while (m_itemQueue.Count > 0)
             {
                 var item = m_itemQueue.Dequeue();
-                Destroy(item.gameObject);
+                if(item && item.gameObject)
+                    Destroy(item.gameObject);
             }
 
             if (!m_currentItem || !m_currentItem.gameObject) return;

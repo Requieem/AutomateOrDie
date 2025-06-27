@@ -52,6 +52,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmelterPlaceholder
       objectReference: {fileID: 0}
+    - target: {fileID: 2969437551519006219, guid: 143de29302fd84b1e86979957747e5a5, type: 3}
+      propertyPath: m_SortingOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2969437551519006219, guid: 143de29302fd84b1e86979957747e5a5, type: 3}
+      propertyPath: m_ChunkCullingBounds.y
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 2986626457060949669, guid: 143de29302fd84b1e86979957747e5a5, type: 3}
       propertyPath: m_Size.y
       value: 11
