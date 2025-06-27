@@ -21,6 +21,7 @@ namespace Code.Scripts.Runtime.Cursors
 
         public Transform MarkerTransform => m_markerSpriteRenderer.transform;
         private Vector2 m_cursorWorldPosition;
+        private Camera m_camera;
 
         private void OnEnable()
         {
@@ -28,67 +29,55 @@ namespace Code.Scripts.Runtime.Cursors
             m_deltaAction.action.Enable();
 
             m_positionAction.action.performed += OnPosition;
-            m_deltaAction.action.performed += OnDelta;
 
-            if (m_hideCursor)
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.Confined;
-                UnityEngine.Cursor.visible = false;
-            }
+            m_camera = Camera.main;
+
+            if (!m_hideCursor) return;
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
         }
 
         private void OnDisable()
         {
             m_positionAction.action.performed -= OnPosition;
-            m_deltaAction.action.performed -= OnDelta;
 
             m_positionAction.action.Disable();
             m_deltaAction.action.Disable();
 
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
-            UnityEngine.Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         private void OnPosition(InputAction.CallbackContext context)
         {
             // Mouse movement sets the absolute position
             var screenPosition = context.ReadValue<Vector2>();
-            if (Camera.main != null) m_cursorWorldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-        }
-
-        private void OnDelta(InputAction.CallbackContext context)
-        {
-            // Controller right stick moves the cursor relatively
-            var delta = context.ReadValue<Vector2>();
-            var worldDelta = delta * m_movementSpeed * Time.deltaTime;
-            m_cursorWorldPosition += worldDelta;
+            if (m_camera) m_cursorWorldPosition = m_camera.ScreenToWorldPoint(screenPosition);
         }
 
         private void Update()
         {
+            m_cursorWorldPosition += m_deltaAction.action.ReadValue<Vector2>() * (m_movementSpeed * Time.deltaTime);
             // Update the cursor's actual sprite position
             if (m_cursorSpriteRenderer)
                 m_cursorSpriteRenderer.transform.position = m_cursorWorldPosition;
 
             // Try to snap marker to grid
-            if (m_markerSpriteRenderer && m_gridManager)
+            if (!m_markerSpriteRenderer || !m_gridManager) return;
+            if (m_gridManager.TrySnapPosition(m_cursorWorldPosition, out var snappedPosition))
             {
-                if (m_gridManager.TrySnapPosition(m_cursorWorldPosition, out var snappedPosition))
-                {
-                    if (Vector3.Distance(m_characterTransform.position, snappedPosition.ToVector3()) / m_gridManager.CellSize.magnitude <
-                        m_maxCellDistance)
-                    {
-                        m_markerSpriteRenderer.enabled = true;
-                        m_markerSpriteRenderer.transform.position = snappedPosition;
-                        m_gridManager.WorldToGrid(snappedPosition.ToVector3(), out var gridPos);
-                        m_gridManager.SetSelectedCell(gridPos);
-                    }
-                }
-                else
-                {
-                    m_gridManager.SetSelectedCell(null);
-                    m_markerSpriteRenderer.enabled = false;
-                }
+                if (!(Vector3.Distance(m_characterTransform.position, snappedPosition.ToVector3()) /
+                      m_gridManager.CellSize.magnitude <
+                      m_maxCellDistance)) return;
+                m_markerSpriteRenderer.enabled = true;
+                m_markerSpriteRenderer.transform.position = snappedPosition;
+                m_gridManager.WorldToGrid(snappedPosition.ToVector3(), out var gridPos);
+                m_gridManager.SetSelectedCell(gridPos);
+            }
+            else
+            {
+                m_gridManager.SetSelectedCell(null);
+                m_markerSpriteRenderer.enabled = false;
             }
         }
 
