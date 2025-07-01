@@ -2,6 +2,8 @@ using AYellowpaper.SerializedCollections;
 using Code.Scripts.Common;
 using Code.Scripts.Runtime.BuildingSystem;
 using Code.Scripts.Runtime.Characters;
+using Code.Scripts.Runtime.Structures;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,6 +15,8 @@ namespace Code.Scripts.Runtime.Grid
         [SerializeField] private Vector2 m_cellSize;
         [SerializeField] private Vector2 m_bounds;
         [SerializeField] private SerializedDictionary<Vector2Int, Building> m_buildings;
+        [SerializeField] private SerializedDictionary<StructureKey, int> m_buildingsCount;
+        [SerializeField] private SerializedDictionary<StructureKey, TextMeshProUGUI> m_buildingsCountTexts;
         [SerializeField] private SerializedDictionary<Vector2Int, Belt> m_belts;
         [SerializeField] private SerializedDictionary<Vector2Int, Tile> m_resources;
         [SerializeField] private SerializedDictionary<Vector2Int, Tile> m_floor;
@@ -33,10 +37,9 @@ namespace Code.Scripts.Runtime.Grid
 
         private void Awake()
         {
-            if (Instance == null)
+            if (!Instance)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -47,21 +50,11 @@ namespace Code.Scripts.Runtime.Grid
             }
         }
 
-        public Vector2 Center => m_center;
         public Vector2 CellSize => m_cellSize;
-        public Vector2 Bounds => m_bounds;
 
         public void SetSelectedCell(Vector2Int? position)
         {
             SelectedCell = position;
-        }
-        public void SetCenter(Vector2 center)
-        {
-            m_center = center;
-        }
-        public void SetCellSize(Vector2 cellSize)
-        {
-            m_cellSize = cellSize;
         }
         public void SetBounds(Vector2 bounds)
         {
@@ -168,17 +161,27 @@ namespace Code.Scripts.Runtime.Grid
 
         public bool TryAddBuilding(Vector2Int position, Building building)
         {
-            return !TryGetCell(position, out _) && m_buildings.TryAdd(position, building);
-        }
+            var valid = !TryGetCell(position, out _) && m_buildings.TryAdd(position, building);
+            if(!valid) return false;
+            if (m_buildingsCount.TryGetValue(building.Key, out var count))
+            {
+                m_buildingsCount[building.Key] = count + 1;
+            }
+            else
+            {
+                m_buildingsCount[building.Key] = 1;
+            }
 
-        public bool TryAddBelt(Vector2Int position, Belt belt)
-        {
-            return m_belts.TryAdd(position, belt);
-        }
+            if (m_buildingsCountTexts.TryGetValue(building.Key, out var text))
+            {
+                text.text = m_buildingsCount[building.Key].ToString();
+            }
+            else
+            {
+                Debug.LogWarning($"No text found for building key {building.Key}");
+            }
 
-        public bool TryAddCharacter(Vector2Int position, Character character)
-        {
-            return !TryGetCell(position, out _) && m_characters.TryAdd(position, character);
+            return true;
         }
 
         public bool TryAddFloor(Vector2Int position, Tile tile)
@@ -198,12 +201,30 @@ namespace Code.Scripts.Runtime.Grid
 
         public bool TryRemoveBuilding(Vector2Int position)
         {
-            return m_buildings.Remove(position);
-        }
+            if (!m_buildings.TryGetValue(position, out var building))
+                return false;
+            if (m_buildingsCount.TryGetValue(building.Key, out var count))
+            {
+                if (count > 1)
+                {
+                    m_buildingsCount[building.Key] = count - 1;
+                }
+                else
+                {
+                    m_buildingsCount.Remove(building.Key);
+                }
+            }
 
-        public bool TryRemoveBelt(Vector2Int position)
-        {
-            return m_belts.Remove(position);
+            if (m_buildingsCountTexts.TryGetValue(building.Key, out var text))
+            {
+                text.text = m_buildingsCount.TryGetValue(building.Key, out var newCount) ? newCount.ToString() : "0";
+            }
+            else
+            {
+                Debug.LogWarning($"No text found for building key {building.Key}");
+            }
+
+            return m_buildings.Remove(position);
         }
 
         public bool TryRemoveCharacter(Vector2Int position)

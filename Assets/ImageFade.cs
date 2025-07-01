@@ -1,7 +1,6 @@
 using System.Collections;
 using Code.Scripts.Common.MyGame.Extensions;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ImageFade : MonoBehaviour
@@ -11,7 +10,13 @@ public class ImageFade : MonoBehaviour
 
     private void Start()
     {
+        StopAllCoroutines();
         FadeOut();
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     public void FadeIn()
@@ -36,9 +41,10 @@ public class ImageFade : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             var alpha = Mathf.Lerp(startAlpha, targetAlpha, (elapsedTime / m_fadeTime).EaseInOutQuad());
+            Debug.Log($"Fading from {startAlpha} to {targetAlpha} over {m_fadeTime}s: {alpha}. Current time: {elapsedTime}, Current Alpha: {alpha}");
             color.a = alpha;
             m_image.color = color;
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
 
         color.a = targetAlpha;

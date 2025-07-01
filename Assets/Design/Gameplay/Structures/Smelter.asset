@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92de7bcde5502405fa9c47c0ab49a422, type: 3}
-  m_Name: Belt Corner ES
+  m_Name: Smelter
   m_EditorClassIdentifier: 
   m_activeClip: {fileID: 0}
   m_inactiveClip: {fileID: 0}

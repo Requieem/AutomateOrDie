@@ -152,7 +152,6 @@ namespace Code.Scripts.Runtime.BuildingSystem
                 Destroy(belt.gameObject);
 
             gridManager.TryRemoveBuilding(selectedPosition);
-            gridManager.TryRemoveBelt(selectedPosition);
             if (Camera.main)
                 AudioSource.PlayClipAtPoint(m_destroySound, Camera.main.transform.position, 0.5f);
         }

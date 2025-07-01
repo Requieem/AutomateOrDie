@@ -44,15 +44,21 @@ namespace Code.Scripts.Runtime.UI
             m_stopAction.action.performed += OnStop;
         }
 
+        private void OnDisable()
+        {
+            m_stopAction.action.performed -= OnStart;
+            m_startAction.action.performed -= OnStop;
+        }
+
         private void OnStart(InputAction.CallbackContext context)
         {
-            if(!context.performed) return;
+            if(!context.performed || !this || !gameObject) return;
             Move();
         }
 
         private void OnStop(InputAction.CallbackContext context)
         {
-            if(!context.performed || m_toggleMode) return;
+            if(!context.performed || !this || !gameObject || m_toggleMode) return;
             OnStart(context);
         }
 

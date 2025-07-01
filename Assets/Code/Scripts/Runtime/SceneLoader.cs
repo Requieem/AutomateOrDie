@@ -25,6 +25,8 @@ namespace Code.Scripts.Runtime
                 return;
             }
 
+            Time.timeScale = 1f; // Ensure time scale is normal before loading the scene
+
             if (Application.CanStreamedLevelBeLoaded(m_sceneToLoad))
             {
                 SceneManager.LoadScene(m_sceneToLoad);

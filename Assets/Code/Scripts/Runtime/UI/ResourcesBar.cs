@@ -24,12 +24,14 @@ namespace Code.Scripts.Runtime.UI
             m_instances.Clear();
             foreach (var trackedItem in m_trackedItems)
             {
-                if (!m_gameState.PercentageEvents.TryGetValue(trackedItem, out var unityEvent)) continue;
+                if (!m_gameState.PercentageEvents.TryGetValue(trackedItem, out var percentageEvent)) continue;
+                if (!m_gameState.AcquiredEvents.TryGetValue(trackedItem, out var acquiredEvent)) continue;
                 var item = Instantiate(m_itemPrefab, transform);
                 item.SetIcon(trackedItem.Sprite);
                 item.SetFill(m_gameState.CurrentItems[trackedItem] / m_gameState.MaxItems[trackedItem]);
                 var activeAtStart = m_activeAtStart.TryGetValue(trackedItem, out var isActive) && isActive;
-                unityEvent.AddListener(item.SetFill);
+                percentageEvent.AddListener(item.SetFill);
+                acquiredEvent.AddListener(item.SetText);
                 item.gameObject.SetActive(activeAtStart);
                 m_instances.Add(trackedItem, item);
             }

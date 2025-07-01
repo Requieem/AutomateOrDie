@@ -13,6 +13,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2800008215834497788, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
+      propertyPath: m_key
+      value: 
+      objectReference: {fileID: 11400000, guid: 61c9b26756e354442b5796fc947829c0, type: 2}
+    - target: {fileID: 2800008215834497788, guid: f6d710bde8a154d899a6fa490019203d, type: 3}
       propertyPath: m_placeholderPrefab
       value: 
       objectReference: {fileID: 555242201593563248, guid: 57baf6032519942f9b4987003eaeea88, type: 3}

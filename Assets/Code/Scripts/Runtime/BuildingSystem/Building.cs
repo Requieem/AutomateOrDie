@@ -1,4 +1,5 @@
 using Code.Scripts.Runtime.Grid;
+using Code.Scripts.Runtime.Structures;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,9 +12,11 @@ namespace Code.Scripts.Runtime.BuildingSystem
         [SerializeField] protected Tilemap m_resourcesTilemap;
         [SerializeField] protected Tilemap m_buildingTilemap;
         [SerializeField] protected BuildingPlaceholder m_placeholderPrefab;
+        [SerializeField] protected StructureKey m_key;
 
         public BuildingPlaceholder PlaceholderPrefab => m_placeholderPrefab;
         public Tilemap BuildingTilemap => m_buildingTilemap;
+        public StructureKey Key => m_key;
 
         private void Start()
         {
@@ -51,7 +54,7 @@ namespace Code.Scripts.Runtime.BuildingSystem
         }
 
         /// <summary>
-        /// Applies all tilemaps using <see cref= 'ApplyTilemap(Tilemap, Tilemap)' />
+        /// Applies all tilemaps using <see cref= 'ApplyTilemap(Tilemap)' />
         /// </summary>
         public void ApplyBuilding()
         {
