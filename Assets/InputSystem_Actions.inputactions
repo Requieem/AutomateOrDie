@@ -63,7 +63,7 @@
                     "name": "Next",
                     "type": "Button",
                     "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -765,6 +765,28 @@
                 },
                 {
                     "name": "",
+                    "id": "12718b95-b2c1-4e89-830d-f6176fd78ebe",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "StopToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "47e0807f-6032-4c3b-89af-0c188ac30526",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StopToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "5176697d-a545-41d9-a866-de7c08faddba",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -825,6 +847,28 @@
                     "interactions": "Press",
                     "processors": "",
                     "groups": ";Gamepad",
+                    "action": "StartToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e0098c34-f038-41ee-b91d-d0284e48c26d",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "StartToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9a700292-c87c-4d89-88f2-0dcf087d9c37",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
                     "action": "StartToggle",
                     "isComposite": false,
                     "isPartOfComposite": false

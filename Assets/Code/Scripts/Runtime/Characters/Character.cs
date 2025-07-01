@@ -11,6 +11,9 @@ namespace Code.Scripts.Runtime.Characters
         [SerializeField] protected SpriteRenderer m_spriteRenderer;
         [SerializeField] protected MovementModel m_movementModel;
         [SerializeField] protected InputActionReference m_moveAction;
+        [SerializeField] protected InputActionReference m_startSprintAction;
+        [SerializeField] protected InputActionReference m_stopSprintAction;
+        [SerializeField] protected bool m_isSprinting;
 
         protected Vector2 MovementInput;
         protected Vector2 Velocity;
@@ -18,16 +21,18 @@ namespace Code.Scripts.Runtime.Characters
 
         protected virtual void OnEnable()
         {
-            m_moveAction.action.Enable();
             m_moveAction.action.performed += OnMove;
             m_moveAction.action.canceled += OnMove;
+            m_startSprintAction.action.performed += OnSprintStart;
+            m_stopSprintAction.action.performed += OnSprintStop;
         }
 
         protected virtual void OnDisable()
         {
-            m_moveAction.action.Disable();
             m_moveAction.action.performed -= OnMove;
             m_moveAction.action.canceled -= OnMove;
+            m_startSprintAction.action.performed -= OnSprintStart;
+            m_stopSprintAction.action.performed -= OnSprintStop;
         }
 
         protected virtual void Awake()
@@ -42,9 +47,28 @@ namespace Code.Scripts.Runtime.Characters
             MovementInput = context.ReadValue<Vector2>();
         }
 
+        protected virtual void OnSprintStart(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                m_isSprinting = true;
+            }
+        }
+
+        protected virtual void OnSprintStop(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                m_isSprinting = false;
+            }
+        }
+
         protected virtual void FixedUpdate()
         {
-            Vector2 targetVelocity = MovementInput * m_movementModel.MaxSpeed;
+            float multiplier = m_isSprinting ? m_movementModel.SprintMultiplier : 1f;
+            Vector2 targetVelocity = MovementInput * (m_movementModel.MaxSpeed * multiplier);
+
+            Debug.Log($"Target Velocity: {targetVelocity}, Current Velocity: {Velocity}, Is Sprinting: {m_isSprinting}");
 
             // Speed up toward target velocity
             if (MovementInput != Vector2.zero)
@@ -67,7 +91,6 @@ namespace Code.Scripts.Runtime.Characters
 
             Rigidbody.linearVelocity = Velocity;
             m_animator.SetFloat(Speed, Velocity.magnitude);
-
             UpdateFacingDirection(Velocity);
         }
 

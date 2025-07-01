@@ -526,6 +526,7 @@ MonoBehaviour:
   m_resourcesTilemap: {fileID: 1026950050969526442}
   m_buildingTilemap: {fileID: 7930167452891621465}
   m_placeholderPrefab: {fileID: 1949415025312564160, guid: 143de29302fd84b1e86979957747e5a5, type: 3}
+  m_key: {fileID: 0}
 --- !u!1 &5951716172894188412
 GameObject:
   m_ObjectHideFlags: 0

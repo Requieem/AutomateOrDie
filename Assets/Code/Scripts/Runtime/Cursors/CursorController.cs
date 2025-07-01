@@ -23,12 +23,15 @@ namespace Code.Scripts.Runtime.Cursors
         private Vector2 m_cursorWorldPosition;
         private Camera m_camera;
 
+        private bool m_useDelta;
+
         private void OnEnable()
         {
             m_positionAction.action.Enable();
             m_deltaAction.action.Enable();
 
             m_positionAction.action.performed += OnPosition;
+            m_deltaAction.action.performed += OnDelta;
 
             m_camera = Camera.main;
 
@@ -40,6 +43,7 @@ namespace Code.Scripts.Runtime.Cursors
         private void OnDisable()
         {
             m_positionAction.action.performed -= OnPosition;
+            m_deltaAction.action.performed -= OnDelta;
 
             m_positionAction.action.Disable();
             m_deltaAction.action.Disable();
@@ -52,12 +56,20 @@ namespace Code.Scripts.Runtime.Cursors
         {
             // Mouse movement sets the absolute position
             var screenPosition = context.ReadValue<Vector2>();
+            m_useDelta = false;
             if (m_camera) m_cursorWorldPosition = m_camera.ScreenToWorldPoint(screenPosition);
+        }
+
+        private void OnDelta(InputAction.CallbackContext context)
+        {
+            m_useDelta = true;
         }
 
         private void Update()
         {
-            m_cursorWorldPosition += m_deltaAction.action.ReadValue<Vector2>() * (m_movementSpeed * Time.deltaTime);
+            if(m_useDelta)
+                m_cursorWorldPosition += m_deltaAction.action.ReadValue<Vector2>() * (m_movementSpeed * Time.deltaTime);
+
             // Update the cursor's actual sprite position
             if (m_cursorSpriteRenderer)
                 m_cursorSpriteRenderer.transform.position = m_cursorWorldPosition;
