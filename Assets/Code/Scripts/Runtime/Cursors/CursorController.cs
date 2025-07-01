@@ -54,10 +54,13 @@ namespace Code.Scripts.Runtime.Cursors
 
         private void OnPosition(InputAction.CallbackContext context)
         {
-            // Mouse movement sets the absolute position
             var screenPosition = context.ReadValue<Vector2>();
+            if (m_camera)
+            {
+                var worldPos = m_camera.ScreenToWorldPoint(screenPosition);
+                m_cursorOffset = worldPos - m_characterTransform.position;
+            }
             m_useDelta = false;
-            if (m_camera) m_cursorWorldPosition = m_camera.ScreenToWorldPoint(screenPosition);
         }
 
         private void OnDelta(InputAction.CallbackContext context)
@@ -65,26 +68,38 @@ namespace Code.Scripts.Runtime.Cursors
             m_useDelta = true;
         }
 
+        private Vector2 m_cursorOffset; // added field at class level
+
         private void Update()
         {
-            if(m_useDelta)
-                m_cursorWorldPosition += m_deltaAction.action.ReadValue<Vector2>() * (m_movementSpeed * Time.deltaTime);
+            if (m_useDelta)
+            {
+                // Controller: apply delta to the offset
+                m_cursorOffset += m_deltaAction.action.ReadValue<Vector2>() * (m_movementSpeed * Time.deltaTime);
+            }
 
-            // Update the cursor's actual sprite position
+            // Always anchor cursor to the player + offset
+            m_cursorWorldPosition = (Vector2)m_characterTransform.position + m_cursorOffset;
+
+            // Update cursor visual
             if (m_cursorSpriteRenderer)
                 m_cursorSpriteRenderer.transform.position = m_cursorWorldPosition;
 
             // Try to snap marker to grid
             if (!m_markerSpriteRenderer || !m_gridManager) return;
+
             if (m_gridManager.TrySnapPosition(m_cursorWorldPosition, out var snappedPosition))
             {
-                if (!(Vector3.Distance(m_characterTransform.position, snappedPosition.ToVector3()) /
-                      m_gridManager.CellSize.magnitude <
-                      m_maxCellDistance)) return;
-                m_markerSpriteRenderer.enabled = true;
-                m_markerSpriteRenderer.transform.position = snappedPosition;
-                m_gridManager.WorldToGrid(snappedPosition.ToVector3(), out var gridPos);
-                m_gridManager.SetSelectedCell(gridPos);
+                var cellDistance = Vector3.Distance(m_characterTransform.position, snappedPosition.ToVector3()) /
+                                   m_gridManager.CellSize.magnitude;
+
+                if (cellDistance < m_maxCellDistance)
+                {
+                    m_markerSpriteRenderer.enabled = true;
+                    m_markerSpriteRenderer.transform.position = snappedPosition;
+                    m_gridManager.WorldToGrid(snappedPosition.ToVector3(), out var gridPos);
+                    m_gridManager.SetSelectedCell(gridPos);
+                }
             }
             else
             {

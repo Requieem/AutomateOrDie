@@ -16,6 +16,9 @@ Assets/Plugins/Editor/JetBrains*
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
+Build-Web/
+Build-MacOS/
+Build-Win/
 Assets/AssetStoreTools*
 # Unity local user project setting
 UserSettings/
