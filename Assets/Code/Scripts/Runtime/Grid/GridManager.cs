@@ -43,7 +43,7 @@ namespace Code.Scripts.Runtime.Grid
             }
             else
             {
-                if(Application.isPlaying)
+                if (Application.isPlaying)
                     Destroy(gameObject);
                 else
                     DestroyImmediate(gameObject);
@@ -56,6 +56,7 @@ namespace Code.Scripts.Runtime.Grid
         {
             SelectedCell = position;
         }
+
         public void SetBounds(Vector2 bounds)
         {
             m_bounds = bounds;
@@ -63,36 +64,42 @@ namespace Code.Scripts.Runtime.Grid
 
         public bool TryGetCell(Vector2Int position, out GameObject obj)
         {
-            if(TryGetBuilding(position, out var building) && building && building.gameObject)
+            if (TryGetBuilding(position, out var building) && building && building.gameObject)
             {
                 obj = building.gameObject;
                 return true;
             }
+
             if (TryGetCharacter(position, out var character) && character && character.gameObject)
             {
                 obj = character.gameObject;
                 return true;
             }
+
             if (TryGetFloor(position, out var tile) && tile && tile.gameObject)
             {
                 obj = tile.gameObject;
                 return true;
             }
+
             if (TryGetWall(position, out tile) && tile && tile.gameObject)
             {
                 obj = tile.gameObject;
                 return true;
             }
+
             if (TryGetResource(position, out tile) && tile && tile.gameObject)
             {
                 obj = tile.gameObject;
                 return true;
             }
+
             if (TryGetBelt(position, out var belt) && belt && belt.gameObject)
             {
                 obj = belt.gameObject;
                 return true;
             }
+
             obj = null;
             return false;
         }
@@ -159,29 +166,38 @@ namespace Code.Scripts.Runtime.Grid
             gridPosition = new Vector2Int(x, -y);
         }
 
-        public bool TryAddBuilding(Vector2Int position, Building building)
+        public bool TryAddBuilding(Building building)
         {
-            var valid = !TryGetCell(position, out _) && m_buildings.TryAdd(position, building);
-            if(!valid) return false;
-            if (m_buildingsCount.TryGetValue(building.Key, out var count))
+            var position = SelectedCell;
+            if (position.HasValue)
             {
-                m_buildingsCount[building.Key] = count + 1;
+                var valid = !TryGetCell(position.Value, out _) && m_buildings.TryAdd(position.Value, building);
+                if (!valid) return false;
+                if (m_buildingsCount.TryGetValue(building.Key, out var count))
+                {
+                    m_buildingsCount[building.Key] = count + 1;
+                }
+                else
+                {
+                    m_buildingsCount[building.Key] = 1;
+                }
+
+                if (m_buildingsCountTexts.TryGetValue(building.Key, out var text))
+                {
+                    text.text = m_buildingsCount[building.Key].ToString();
+                }
+                else
+                {
+                    Debug.LogWarning($"No text found for building key {building.Key}");
+                }
+
+                return true;
             }
             else
             {
-                m_buildingsCount[building.Key] = 1;
+                Debug.LogWarning("Cannot add building: no selected cell.");
+                return false;
             }
-
-            if (m_buildingsCountTexts.TryGetValue(building.Key, out var text))
-            {
-                text.text = m_buildingsCount[building.Key].ToString();
-            }
-            else
-            {
-                Debug.LogWarning($"No text found for building key {building.Key}");
-            }
-
-            return true;
         }
 
         public bool TryAddFloor(Vector2Int position, Tile tile)
